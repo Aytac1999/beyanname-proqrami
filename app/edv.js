@@ -163,12 +163,20 @@ function _tapHer(d, kodlar) {  // bütün strukturda indicator-a görə axtarı�
   gez(d.base.taxInformation || {});
   return tapildi;
 }
+// Əlavə 3 sətirləri: kod -> sətir nömrəsi (yalnız təsdiqlənmiş olanlar yazılır; qalanı "kod _1037" kimi görünür)
+const A3_AD = {};
+const _a3Sirala = (a, b) => Number(a.slice(1)) - Number(b.slice(1));
+const a3Ad = (k) => A3_AD[k] || "kod " + k;
 function yigcamSehife(data) {
+  const A3_CEM = "_1091";
+  const a3Hamisi = (d) => (((d.base.taxInformation || {}).appendix3 || {}).vatOperations || []);
+  const a3Kodlar = [...new Set(data.flatMap((d) => a3Hamisi(d).filter((r) => r.indicator !== A3_CEM && (Number(r.cost) || Number(r.amount))).map((r) => r.indicator)))].sort(_a3Sirala);
   const bas = (a) => a.map((v) => ({ v, s: S.BASLIQ }));
   const sut = [..._META_BAS,
     "YGB (310): ƏDV",
     "Qaimə (308): ƏDV",
-    "Əlavə 3 (301.1): Təqdim edilmiş mal, iş və xidmətlərin dəyəri (ƏDV nəzərə alınmadan)", "Əlavə 3 (301.1): Daxil olmuş məbləğ (ƏDV nəzərə alınmadan)",
+    ...a3Kodlar.flatMap((k) => [`Əlavə 3 [${a3Ad(k)}]: Təqdim edilmiş mal, iş və xidmətlərin dəyəri (ƏDV nəzərə alınmadan)`, `Əlavə 3 [${a3Ad(k)}]: Daxil olmuş məbləğ (ƏDV nəzərə alınmadan)`]),
+    "Əlavə 3 CƏMİ (301.1): dəyər", "Əlavə 3 CƏMİ (301.1): daxil olmuş məbləğ",
     "Hesabat dövriyyəsi (301): dəyər", "Hesabat dövriyyəsi (301): daxil olmuş məbləğ", "Hesabat dövriyyəsi (301): ƏDV",
     "Əməliyyatlar CƏMİ (305): ƏDV",
     "Debitor borc (307): dövrün əvvəlinə", "Debitor borc (307): yaranan", "Debitor borc (307): silinən", "Debitor borc (307): dövrün sonuna",
@@ -181,7 +189,9 @@ function yigcamSehife(data) {
       k = KOD_319_1.length ? _tapHer(d, KOD_319_1) || {} : {}, an = (d.base.taxInformation || {}).mainTax || {};
     return [..._m(d),
       _p(_r2(y.vat)), _p(_r2(q.vat)),
-      _p(_r2(a3.cost)), _p(_r2(a3.amount)), _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)), _p(_r2(h5.vat)),
+      ...a3Kodlar.flatMap((kod) => { const r = a3Hamisi(d).find((x) => x.indicator === kod) || {}; return [_p(_r2(r.cost)), _p(_r2(r.amount))]; }),
+      ...(a3.indicator ? [_p(_r2(a3.cost)), _p(_r2(a3.amount))] : [_p(_r2(a3Kodlar.reduce((t, kod) => t + (Number((a3Hamisi(d).find((x) => x.indicator === kod) || {}).cost) || 0), 0))), _p(_r2(a3Kodlar.reduce((t, kod) => t + (Number((a3Hamisi(d).find((x) => x.indicator === kod) || {}).amount) || 0), 0)))]),
+      _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)), _p(_r2(h5.vat)),
       _p(_r2(db.previousDebt)), _p(_r2(db.incurredDebt)), _p(_r2(db.removedDebt)), _p(_r2(db.lastDebt)),
       _p(_r2(k.cost || k.turnover)), _p(_r2(k.paidAmount)), _p(_r2(k.vat)),
       _p(_r2(an.mustBePaid)), _p(_r2(an.mustBeReturned))];
