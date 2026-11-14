@@ -166,9 +166,8 @@ function _tapHer(d, kodlar) {  // bütün strukturda indicator-a görə axtarı�
 function yigcamSehife(data) {
   const bas = (a) => a.map((v) => ({ v, s: S.BASLIQ }));
   const sut = [..._META_BAS,
-    "YGB (310): ödənilmiş məbləğ", "YGB (310): ƏDV",
-    "Qaimə (308): ödənilmiş məbləğ", "Qaimə (308): ƏDV",
-    "Əvəzləşdirmə CƏMİ (317): məbləğ", "Əvəzləşdirmə CƏMİ (317): ƏDV",
+    "YGB (310): ƏDV",
+    "Qaimə (308): ƏDV",
     "Əlavə 3 dövriyyə (301.1): dəyər", "Əlavə 3 dövriyyə (301.1): daxil olmuş məbləğ",
     "Hesabat dövriyyəsi (301): dəyər", "Hesabat dövriyyəsi (301): daxil olmuş məbləğ", "Hesabat dövriyyəsi (301): ƏDV",
     "Əməliyyatlar CƏMİ (305): ƏDV",
@@ -181,7 +180,7 @@ function yigcamSehife(data) {
       h = _tap(d, "calculations", "_1001") || {}, h5 = _tap(d, "calculations", "_1005") || {}, db = _tap(d, "debtorDebt", "_1400") || {},
       k = KOD_319_1.length ? _tapHer(d, KOD_319_1) || {} : {}, an = (d.base.taxInformation || {}).mainTax || {};
     return [..._m(d),
-      _p(_r2(y.paidAmount)), _p(_r2(y.vat)), _p(_r2(q.paidAmount)), _p(_r2(q.vat)), _p(_r2(c.paidAmount)), _p(_r2(c.vat)),
+      _p(_r2(y.vat)), _p(_r2(q.vat)),
       _p(_r2(a3.cost)), _p(_r2(a3.amount)), _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)), _p(_r2(h5.vat)),
       _p(_r2(db.previousDebt)), _p(_r2(db.incurredDebt)), _p(_r2(db.removedDebt)), _p(_r2(db.lastDebt)),
       _p(_r2(k.cost || k.turnover)), _p(_r2(k.paidAmount)), _p(_r2(k.vat)),
