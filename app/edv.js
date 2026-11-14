@@ -166,16 +166,19 @@ function _tapHer(d, kodlar) {  // bütün strukturda indicator-a görə axtarı�
 // Əlavə 3 sətirləri: kod -> sətir nömrəsi (yalnız təsdiqlənmiş olanlar yazılır; qalanı "kod _1037" kimi görünür)
 const A3_AD = {
   _1037: "301.1.1.7 Digər malların təqdim edilməsi üzrə əməliyyatlar",
+  _1227: "301-2 Pərakəndə ticarət üzrə ƏDV-yə 18 faiz dərəcə ilə cəlb edilən əməliyyatlar", // kod _1228-dən əvvəlki sətir kimi QƏBUL EDİLİB; pərakəndə satışı olan ayda yoxlanmalıdır
+  _1228: "301-3 Topdan ticarət üzrə ƏDV-yə 18 faiz dərəcə ilə cəlb edilən əməliyyatlar",
 };
 // istifadəçinin istəyi ilə göstərilməyən sətirlər (CƏMİ-yə yenə daxildir)
-const A3_GIZLI = ["_1044", "_1228"];
+const A3_GIZLI = ["_1044"];
+const A3_HER = ["_1227", "_1228"]; // həmişə göstərilən sütunlar (sıfır olsa da)
 const _a3Sirala = (a, b) => Number(a.slice(1)) - Number(b.slice(1));
 const a3Ad = (k) => A3_AD[k] || "Əlavə 3 kod " + k;
 function yigcamSehife(data) {
   const A3_CEM = "_1091";
   const a3Hamisi = (d) => (((d.base.taxInformation || {}).appendix3 || {}).vatOperations || []);
   const a3Kodlar = [...new Set(data.flatMap((d) => a3Hamisi(d).filter((r) => r.indicator !== A3_CEM && (Number(r.cost) || Number(r.amount))).map((r) => r.indicator)))].sort(_a3Sirala);
-  const a3Goster = a3Kodlar.filter((k) => !A3_GIZLI.includes(k)); // istifadəçinin sildiyi sütunlar göstərilmir; hamısı CƏMİ-yə daxildir
+  const a3Goster = [...new Set([...a3Kodlar, ...A3_HER])].filter((k) => !A3_GIZLI.includes(k)).sort(_a3Sirala); // istifadəçinin sildiyi sütunlar göstərilmir; hamısı CƏMİ-yə daxildir
   const bas = (a) => a.map((v) => ({ v, s: S.BASLIQ }));
   const sut = [..._META_BAS,
     "YGB (310): ƏDV",
@@ -195,7 +198,7 @@ function yigcamSehife(data) {
     return [..._m(d),
       _p(_r2(y.vat)), _p(_r2(q.vat)),
       ...a3Goster.flatMap((kod) => { const r = a3Hamisi(d).find((x) => x.indicator === kod) || {}; return [_p(_r2(r.cost)), _p(_r2(r.amount))]; }),
-      ...(a3.indicator ? [_p(_r2(a3.cost)), _p(_r2(a3.amount))] : [_p(_r2(a3Kodlar.reduce((t, kod) => t + (Number((a3Hamisi(d).find((x) => x.indicator === kod) || {}).cost) || 0), 0))), _p(_r2(a3Kodlar.reduce((t, kod) => t + (Number((a3Hamisi(d).find((x) => x.indicator === kod) || {}).amount) || 0), 0)))]),
+      _p(_r2(a3.cost)), _p(_r2(a3.amount)),
       _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)), _p(_r2(h5.vat)),
       _p(_r2(db.previousDebt)), _p(_r2(db.incurredDebt)), _p(_r2(db.removedDebt)), _p(_r2(db.lastDebt)),
       _p(_r2(k.cost || k.turnover)), _p(_r2(k.paidAmount)), _p(_r2(k.vat)),
