@@ -164,16 +164,20 @@ function _tapHer(d, kodlar) {  // bütün strukturda indicator-a görə axtarı�
   return tapildi;
 }
 // Əlavə 3 sətirləri: kod -> sətir nömrəsi (yalnız təsdiqlənmiş olanlar yazılır; qalanı "kod _1037" kimi görünür)
-const A3_AD = {  // ekrandakı rəqəmlərlə TƏSDİQLƏNMİŞ (Sentyabr 2026, iki bəyannamə)
-  _1037: "301.1.1.7 Digər malların təqdim edilməsi üzrə əməliyyatlar",
-  _1055: "301.1.2.6 Sair işlərin görülməsi və xidmətlərin göstərilməsi üzrə əməliyyatlar",
+const A3_AD = {  // ekrandakı rəqəmlərlə TƏSDİQLƏNMİŞ (Sentyabr 2026, 3 bəyannamə)
+  _1037: "301.1.1 Malların təqdim edilməsindən gəlir",
+  _1044: "301.1.1.7 Digər malların təqdim edilməsi üzrə əməliyyatlar",
+  _1046: "301.1.1.8 Təqdim ediləcək malların hesabına əvvəlcədən alınmış ödənişləri",
+  _1055: "301.1.2 İşlərin görülməsi və xidmətlərin göstərilməsi üzrə əməliyyatlar",
+  _1061: "301.1.2.6 Sair işlərin görülməsi və xidmətlərin göstərilməsi üzrə əməliyyatlar",
+  _1063: "301.1.2.7 Təqdim ediləcək işlərin və xidmətlərin hesabına əvvəlcədən alınmış ödənişləri",
   _1227: "301-2 Pərakəndə ticarət üzrə ƏDV-yə 18 faiz dərəcə ilə cəlb edilən əməliyyatlar",
   _1228: "301-3 Topdan ticarət üzrə ƏDV-yə 18 faiz dərəcə ilə cəlb edilən əməliyyatlar",
   _1239: "301-4 Vergi Məcəlləsinin 174.5-ci maddəsinə əsasən formalaşan dövriyyə",
 };
 // istifadəçinin istəyi ilə göstərilməyən sətirlər (CƏMİ-yə yenə daxildir)
-const A3_GIZLI = ["_1044", "_1061"]; // 301.1.1 və 301.1.2 ara yekunları (301.1 CƏMİ-nin tərkibi)
-const A3_HER = ["_1037", "_1055", "_1227", "_1228", "_1239"]; // həmişə göstərilən sütunlar (sıfır olsa da)
+const A3_GIZLI = ["_1037", "_1055"]; // 301.1.1 və 301.1.2 ara yekunları (301.1 CƏMİ-nin tərkibi)
+const A3_HER = ["_1044", "_1046", "_1061", "_1063", "_1227", "_1228"]; // həmişə göstərilən sütunlar (sıfır olsa da)
 const _a3Sirala = (a, b) => Number(a.slice(1)) - Number(b.slice(1));
 const a3Ad = (k) => A3_AD[k] || "Əlavə 3 kod " + k;
 function yigcamSehife(data) {
