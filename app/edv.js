@@ -164,7 +164,9 @@ function _tapHer(d, kodlar) {  // bütün strukturda indicator-a görə axtarı�
   return tapildi;
 }
 // Əlavə 3 sətirləri: kod -> sətir nömrəsi (yalnız təsdiqlənmiş olanlar yazılır; qalanı "kod _1037" kimi görünür)
-const A3_AD = {};
+const A3_AD = {
+  _1037: "301.1.1.7 Digər malların təqdim edilməsi üzrə əməliyyatlar",
+};
 const _a3Sirala = (a, b) => Number(a.slice(1)) - Number(b.slice(1));
 const a3Ad = (k) => A3_AD[k] || "kod " + k;
 function yigcamSehife(data) {
