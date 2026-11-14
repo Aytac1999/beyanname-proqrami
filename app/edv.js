@@ -168,7 +168,7 @@ function yigcamSehife(data) {
   const sut = [..._META_BAS,
     "YGB (310): ƏDV",
     "Qaimə (308): ƏDV",
-    "Əlavə 3 dövriyyə (301.1): dəyər", "Əlavə 3 dövriyyə (301.1): daxil olmuş məbləğ",
+    "Əlavə 3 dövriyyə (301.1): daxil olmuş məbləğ",
     "Hesabat dövriyyəsi (301): dəyər", "Hesabat dövriyyəsi (301): daxil olmuş məbləğ", "Hesabat dövriyyəsi (301): ƏDV",
     "Əməliyyatlar CƏMİ (305): ƏDV",
     "Debitor borc (307): dövrün əvvəlinə", "Debitor borc (307): yaranan", "Debitor borc (307): silinən", "Debitor borc (307): dövrün sonuna",
@@ -181,7 +181,7 @@ function yigcamSehife(data) {
       k = KOD_319_1.length ? _tapHer(d, KOD_319_1) || {} : {}, an = (d.base.taxInformation || {}).mainTax || {};
     return [..._m(d),
       _p(_r2(y.vat)), _p(_r2(q.vat)),
-      _p(_r2(a3.cost)), _p(_r2(a3.amount)), _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)), _p(_r2(h5.vat)),
+      _p(_r2(a3.amount)), _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)), _p(_r2(h5.vat)),
       _p(_r2(db.previousDebt)), _p(_r2(db.incurredDebt)), _p(_r2(db.removedDebt)), _p(_r2(db.lastDebt)),
       _p(_r2(k.cost || k.turnover)), _p(_r2(k.paidAmount)), _p(_r2(k.vat)),
       _p(_r2(an.mustBePaid)), _p(_r2(an.mustBeReturned))];
