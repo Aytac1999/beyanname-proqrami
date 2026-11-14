@@ -164,14 +164,16 @@ function _tapHer(d, kodlar) {  // bütün strukturda indicator-a görə axtarı�
   return tapildi;
 }
 // Əlavə 3 sətirləri: kod -> sətir nömrəsi (yalnız təsdiqlənmiş olanlar yazılır; qalanı "kod _1037" kimi görünür)
-const A3_AD = {
+const A3_AD = {  // ekrandakı rəqəmlərlə TƏSDİQLƏNMİŞ (Sentyabr 2026, iki bəyannamə)
   _1037: "301.1.1.7 Digər malların təqdim edilməsi üzrə əməliyyatlar",
-  _1227: "301-2 Pərakəndə ticarət üzrə ƏDV-yə 18 faiz dərəcə ilə cəlb edilən əməliyyatlar", // kod _1228-dən əvvəlki sətir kimi QƏBUL EDİLİB; pərakəndə satışı olan ayda yoxlanmalıdır
+  _1055: "301.1.2.6 Sair işlərin görülməsi və xidmətlərin göstərilməsi üzrə əməliyyatlar",
+  _1227: "301-2 Pərakəndə ticarət üzrə ƏDV-yə 18 faiz dərəcə ilə cəlb edilən əməliyyatlar",
   _1228: "301-3 Topdan ticarət üzrə ƏDV-yə 18 faiz dərəcə ilə cəlb edilən əməliyyatlar",
+  _1239: "301-4 Vergi Məcəlləsinin 174.5-ci maddəsinə əsasən formalaşan dövriyyə",
 };
 // istifadəçinin istəyi ilə göstərilməyən sətirlər (CƏMİ-yə yenə daxildir)
-const A3_GIZLI = ["_1044"];
-const A3_HER = ["_1227", "_1228"]; // həmişə göstərilən sütunlar (sıfır olsa da)
+const A3_GIZLI = ["_1044", "_1061"]; // 301.1.1 və 301.1.2 ara yekunları (301.1 CƏMİ-nin tərkibi)
+const A3_HER = ["_1037", "_1055", "_1227", "_1228", "_1239"]; // həmişə göstərilən sütunlar (sıfır olsa da)
 const _a3Sirala = (a, b) => Number(a.slice(1)) - Number(b.slice(1));
 const a3Ad = (k) => A3_AD[k] || "Əlavə 3 kod " + k;
 function yigcamSehife(data) {
