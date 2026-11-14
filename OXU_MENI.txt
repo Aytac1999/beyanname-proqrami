@@ -5,7 +5,7 @@ QURAŞDIRMA (yalnız bir dəfə)
 2) Chrome-da adres sətrinə yazın:  chrome://extensions
 3) Sağ yuxarıda "Developer mode" düyməsini yandırın.
 4) "Load unpacked" düyməsinə basın və bu qovluğu seçin.
-5) Yapboz (Extensions) işarəsindən "ƏDV Bəyannamələri"ni sancın.
+5) Yapboz (Extensions) işarəsindən "Bəyannamə tərkibi proqramı"nı sancın.
 
 İSTİFADƏ
 1) e-taxes-ə həmişəki kimi daxil olun və səhifəni açıq saxlayın.
