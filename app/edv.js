@@ -177,6 +177,8 @@ const A3_AD = {  // ekrandakı rəqəmlərlə TƏSDİQLƏNMİŞ (Sentyabr 2026, 
   _1239: "301-4 Vergi Məcəlləsinin 174.5-ci maddəsinə əsasən formalaşan dövriyyə",
 };
 // istifadəçinin istəyi ilə göstərilməyən sətirlər (CƏMİ-yə yenə daxildir)
+// yalnız "daxil olmuş məbləğ" olan sətirlər: kod -> sütun başlığı
+const A3_TEK = { _1239: "Vergi Məcəlləsinin 174.5-ci maddəsinə əsasən formalaşan dövriyyə" };
 const A3_GIZLI = ["_1037", "_1055"]; // 301.1.1 və 301.1.2 ara yekunları (301.1 CƏMİ-nin tərkibi)
 const A3_HER = ["_1044", "_1046", "_1056", "_1061", "_1063", "_1227", "_1228", "_1239"]; // həmişə göstərilən sütunlar (sıfır olsa da)
 const _a3Sirala = (a, b) => Number(a.slice(1)) - Number(b.slice(1));
@@ -190,7 +192,7 @@ function yigcamSehife(data) {
   const sut = [..._META_BAS,
     "YGB (310): ƏDV",
     "Qaimə (308): ƏDV",
-    ...a3Goster.flatMap((k) => [`${a3Ad(k)} - Təqdim edilmiş mal, iş və xidmətlərin dəyəri (ƏDV nəzərə alınmadan)`, `${a3Ad(k)} - Daxil olmuş məbləğ (ƏDV nəzərə alınmadan)`]),
+    ...a3Goster.flatMap((k) => A3_TEK[k] ? [A3_TEK[k]] : [`${a3Ad(k)} - Təqdim edilmiş mal, iş və xidmətlərin dəyəri (ƏDV nəzərə alınmadan)`, `${a3Ad(k)} - Daxil olmuş məbləğ (ƏDV nəzərə alınmadan)`]),
     "Əlavə 3 CƏMİ (301.1): dəyər", "Əlavə 3 CƏMİ (301.1): daxil olmuş məbləğ",
     "Hesabat dövriyyəsi (301): dəyər", "Hesabat dövriyyəsi (301): daxil olmuş məbləğ", "Hesabat dövriyyəsi (301): ƏDV",
     "Əməliyyatlar CƏMİ (305): ƏDV",
@@ -204,7 +206,7 @@ function yigcamSehife(data) {
       k = KOD_319_1.length ? _tapHer(d, KOD_319_1) || {} : {}, an = (d.base.taxInformation || {}).mainTax || {};
     return [..._m(d),
       _p(_r2(y.vat)), _p(_r2(q.vat)),
-      ...a3Goster.flatMap((kod) => { const r = a3Hamisi(d).find((x) => x.indicator === kod) || {}; return [_p(_r2(r.cost)), _p(_r2(r.amount))]; }),
+      ...a3Goster.flatMap((kod) => { const r = a3Hamisi(d).find((x) => x.indicator === kod) || {}; return A3_TEK[kod] ? [_p(_r2(r.amount))] : [_p(_r2(r.cost)), _p(_r2(r.amount))]; }),
       _p(_r2(a3.cost)), _p(_r2(a3.amount)),
       _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)), _p(_r2(h5.vat)),
       _p(_r2(db.previousDebt)), _p(_r2(db.incurredDebt)), _p(_r2(db.removedDebt)), _p(_r2(db.lastDebt)),
