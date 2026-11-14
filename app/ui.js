@@ -19,6 +19,12 @@ aralik(BU_IL, 1, BU_IL, bu.getMonth() + 1);
 $("ver").textContent = "v" + (window.APP_VERSIYA || "?");
 $("kecenil").onclick = () => aralik(BU_IL - 1, 1, BU_IL - 1, 12);
 $("hamisil").onclick = () => aralik(ILK_IL, 1, BU_IL, bu.getMonth() + 1);
+for (const t of document.querySelectorAll(".tab")) t.onclick = () => {
+  for (const x of document.querySelectorAll(".tab")) x.classList.toggle("aktiv", x === t);
+  const edv = t.dataset.tip === "edv";
+  $("edvBolme").hidden = !edv; $("tezlik").hidden = edv;
+  $("basla").disabled = !edv && !isleyir;
+};
 $("ac").onclick = () => KOPRU("ac_etaxes");
 $("dayan").onclick = () => { dayandi = true; $("durum").textContent = "Dayandırılır..."; };
 

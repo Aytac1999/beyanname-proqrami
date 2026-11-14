@@ -26,3 +26,8 @@ button:disabled{opacity:.45;cursor:default}
 progress{width:100%;height:10px;border-radius:5px;overflow:hidden;accent-color:#1f4e8c}
 #log{width:100%;height:70px;margin-top:10px;border:1px solid #c3d0e2;border-radius:8px;padding:8px;font:12px/1.4 Consolas,monospace;background:#fafcff;resize:vertical}
 .kicik{color:#6b7c8e;font-size:12px;margin-top:6px}
+.tablar{display:flex;gap:4px;margin:0 0 10px;border-bottom:2px solid #c9d6ea;flex-wrap:wrap}
+.tab{background:transparent;color:#1f4e8c;border:0;border-bottom:3px solid transparent;border-radius:8px 8px 0 0;padding:7px 12px;font-weight:600;margin-bottom:-2px}
+.tab:hover:not(:disabled){background:#e3ecf8}
+.tab.aktiv{background:#fff;border-bottom-color:#1f4e8c;color:#173e73}
+[hidden]{display:none!important}

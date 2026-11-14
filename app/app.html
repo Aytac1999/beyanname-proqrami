@@ -1,6 +1,13 @@
 <div id="ui">
   <h1>Bəyannamə tərkibi proqramı <span id="ver" class="alt"></span></h1>
   <div id="xeberdarliq" class="xeb" hidden>e-taxes-ə daxil olunmayıb. Səhifədə Asan İmza ilə daxil olun. <button id="ac" class="ikinci">e-taxes-i aç</button></div>
+  <nav id="tablar" class="tablar">
+    <button class="tab aktiv" data-tip="edv">ƏDV</button>
+    <button class="tab" data-tip="omv">Ödəmə mənbəyində vergi</button>
+    <button class="tab" data-tip="vahid">Vahid bəyannamə</button>
+  </nav>
+  <div id="tezlik" class="kart" hidden><h2>Tezliklə</h2>Bu bəyannamə növü üçün bölmə hələ hazırlanmayıb. Əlavə ediləndə proqram avtomatik yenilənəcək.</div>
+  <div id="edvBolme">
   <section class="kart"><h2>Dövr</h2>
     <div class="dovr">
       <div class="dsira"><span class="et">Başlanğıc</span><select id="dan_ay"></select><select id="dan_il"></select></div>
@@ -22,6 +29,7 @@
     <label><input type="checkbox" id="s_xam"> Xam məlumat (yoxlama üçün)</label>
     <div class="kicik">Susmaya görə yalnız "ƏDV yığcam" vərəqi hazırlanır: bütün aylar, hər bəyannamə bir sətirdir.</div>
   </section>
+  </div>
   <div class="ana"><button id="basla">Başla</button> <button class="ikinci" id="dayan" disabled>Dayandır</button></div>
   <div id="durum">Hazırdır. e-taxes-ə daxil olub dövrü seçin.</div>
   <progress id="pb" value="0" max="1"></progress>
