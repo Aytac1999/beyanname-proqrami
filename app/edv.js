@@ -178,7 +178,7 @@ const A3_AD = {  // ekrandakı rəqəmlərlə TƏSDİQLƏNMİŞ (Sentyabr 2026, 
 };
 // istifadəçinin istəyi ilə göstərilməyən sətirlər (CƏMİ-yə yenə daxildir)
 const A3_GIZLI = ["_1037", "_1055"]; // 301.1.1 və 301.1.2 ara yekunları (301.1 CƏMİ-nin tərkibi)
-const A3_HER = ["_1044", "_1046", "_1056", "_1061", "_1063", "_1227", "_1228"]; // həmişə göstərilən sütunlar (sıfır olsa da)
+const A3_HER = ["_1044", "_1046", "_1056", "_1061", "_1063", "_1227", "_1228", "_1239"]; // həmişə göstərilən sütunlar (sıfır olsa da)
 const _a3Sirala = (a, b) => Number(a.slice(1)) - Number(b.slice(1));
 const a3Ad = (k) => A3_AD[k] || "Əlavə 3 kod " + k;
 function yigcamSehife(data) {
