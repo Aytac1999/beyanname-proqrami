@@ -4,14 +4,23 @@ const $ = (id) => document.getElementById(id);
 let dayandi = false, isleyir = false, bearer = false;
 
 const bu = new Date();
+const AYLAR = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "İyun", "İyul", "Avqust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr"];
+const ILK_IL = 2019, BU_IL = bu.getFullYear();
 const ym = (il, ay) => `${il}-${String(ay).padStart(2, "0")}`;
-const aralik = (d, y) => { $("dan").value = d; $("ya").value = y; };
-$("dan").value = ym(bu.getFullYear(), 1);
-$("ya").value = ym(bu.getFullYear(), bu.getMonth() + 1);
+for (const p of ["dan", "ya"]) {
+  $(p + "_ay").innerHTML = AYLAR.map((a, i) => `<option value="${i + 1}">${a}</option>`).join("");
+  let s = ""; for (let i = BU_IL; i >= ILK_IL; i--) s += `<option value="${i}">${i}</option>`;
+  $(p + "_il").innerHTML = s;
+}
+const oxu = (p) => ym($(p + "_il").value, $(p + "_ay").value);
+const yaz = (p, il, ay) => { $(p + "_il").value = il; $(p + "_ay").value = ay; };
+const aralik = (i1, a1, i2, a2) => { yaz("dan", i1, a1); yaz("ya", i2, a2); };
+aralik(BU_IL, 1, BU_IL, bu.getMonth() + 1);
 $("ver").textContent = "v" + (window.APP_VERSIYA || "?");
-$("buil").onclick = () => aralik(ym(bu.getFullYear(), 1), ym(bu.getFullYear(), bu.getMonth() + 1));
-$("kecenil").onclick = () => aralik(ym(bu.getFullYear() - 1, 1), ym(bu.getFullYear() - 1, 12));
-$("son3").onclick = () => aralik(ym(bu.getFullYear() - 2, 1), ym(bu.getFullYear(), bu.getMonth() + 1));
+$("buil").onclick = () => aralik(BU_IL, 1, BU_IL, bu.getMonth() + 1);
+$("kecenil").onclick = () => aralik(BU_IL - 1, 1, BU_IL - 1, 12);
+$("son3").onclick = () => aralik(BU_IL - 2, 1, BU_IL, bu.getMonth() + 1);
+$("hamisil").onclick = () => aralik(ILK_IL, 1, BU_IL, bu.getMonth() + 1);
 $("ac").onclick = () => KOPRU("ac_etaxes");
 $("dayan").onclick = () => { dayandi = true; $("durum").textContent = "Dayandırılır..."; };
 
@@ -43,8 +52,7 @@ function bitir(msg) {
 
 $("basla").onclick = async () => {
   if (isleyir) return;
-  const dan = $("dan").value, ya = $("ya").value;
-  if (!dan || !ya) { $("durum").textContent = "Dövrün başlanğıc və son ayını seçin."; return; }
+  const dan = oxu("dan"), ya = oxu("ya");
   if (dan > ya) { $("durum").textContent = "Başlanğıc ay son aydan böyük ola bilməz."; return; }
   isleyir = true; dayandi = false;
   $("basla").disabled = true; $("dayan").disabled = false;

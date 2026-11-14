@@ -1,25 +1,28 @@
 <div id="ui">
   <h1>ƏDV bəyannamələri → Excel <span id="ver" class="alt"></span></h1>
   <div id="xeberdarliq" class="xeb" hidden>e-taxes-ə daxil olunmayıb. Səhifədə Asan İmza ilə daxil olun. <button id="ac" class="ikinci">e-taxes-i aç</button></div>
-  <fieldset><legend>Dövr (ay)</legend>
-    <label>Başlanğıc <input type="month" id="dan"></label>
-    <label>Son <input type="month" id="ya"></label>
-    <div class="sira"><button class="ikinci" id="buil">Bu il</button> <button class="ikinci" id="kecenil">Keçən il</button> <button class="ikinci" id="son3">Son 3 il</button></div>
-  </fieldset>
-  <fieldset><legend>Hansı bəyannamələr</legend>
+  <section class="kart"><h2>Dövr</h2>
+    <div class="dovr">
+      <div class="dsira"><span class="et">Başlanğıc</span><select id="dan_ay"></select><select id="dan_il"></select></div>
+      <div class="ox">→</div>
+      <div class="dsira"><span class="et">Son</span><select id="ya_ay"></select><select id="ya_il"></select></div>
+    </div>
+    <div class="sira"><button class="ikinci" id="buil">Bu il</button> <button class="ikinci" id="kecenil">Keçən il</button> <button class="ikinci" id="son3">Son 3 il</button> <button class="ikinci" id="hamisil">Bütün illər</button></div>
+  </section>
+  <section class="kart"><h2>Hansı bəyannamələr</h2>
     <select id="rejim">
       <option value="hamisi">Hamısı (Cari, Dəqiqləşdirilmiş, Kameral və s.)</option>
       <option value="sonuncu">Hər ay üçün yalnız sonuncusu</option>
     </select>
     <div class="kicik">Layihə (draft) və silinmiş bəyannamələr daxil edilmir.</div>
-  </fieldset>
-  <fieldset><legend>Excel-ə əlavə vərəqlər (istəyə görə)</legend>
+  </section>
+  <section class="kart"><h2>Əlavə vərəqlər <span class="alt">(istəyə görə)</span></h2>
     <label><input type="checkbox" id="s_ygb"> YGB siyahısı</label>
     <label><input type="checkbox" id="s_qaime"> Qaimə siyahısı</label>
     <label><input type="checkbox" id="s_xam"> Xam məlumat (yoxlama üçün)</label>
     <div class="kicik">Susmaya görə yalnız "ƏDV yığcam" vərəqi hazırlanır: bütün aylar, hər bəyannamə bir sətirdir.</div>
-  </fieldset>
-  <div class="sira"><button id="basla">Başla</button> <button class="ikinci" id="dayan" disabled>Dayandır</button></div>
+  </section>
+  <div class="ana"><button id="basla">Başla</button> <button class="ikinci" id="dayan" disabled>Dayandır</button></div>
   <div id="durum">Hazırdır. e-taxes-ə daxil olub dövrü seçin.</div>
   <progress id="pb" value="0" max="1"></progress>
   <textarea id="log" readonly></textarea>
