@@ -168,7 +168,7 @@ function yigcamSehife(data) {
   const sut = [..._META_BAS,
     "YGB (310): ƏDV",
     "Qaimə (308): ƏDV",
-    "Əlavə 3 (301.1): Təqdim edilmiş mal, iş və xidmətlərin dəyəri (ƏDV nəzərə alınmadan)", "Əlavə 3 dövriyyə (301.1): daxil olmuş məbləğ",
+    "Əlavə 3 (301.1): Təqdim edilmiş mal, iş və xidmətlərin dəyəri (ƏDV nəzərə alınmadan)", "Əlavə 3 (301.1): Daxil olmuş məbləğ (ƏDV nəzərə alınmadan)",
     "Hesabat dövriyyəsi (301): dəyər", "Hesabat dövriyyəsi (301): daxil olmuş məbləğ", "Hesabat dövriyyəsi (301): ƏDV",
     "Əməliyyatlar CƏMİ (305): ƏDV",
     "Debitor borc (307): dövrün əvvəlinə", "Debitor borc (307): yaranan", "Debitor borc (307): silinən", "Debitor borc (307): dövrün sonuna",
