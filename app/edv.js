@@ -167,13 +167,15 @@ function _tapHer(d, kodlar) {  // bütün strukturda indicator-a görə axtarı�
 const A3_AD = {
   _1037: "301.1.1.7 Digər malların təqdim edilməsi üzrə əməliyyatlar",
 };
+// istifadəçinin istəyi ilə göstərilməyən sətirlər (CƏMİ-yə yenə daxildir)
+const A3_GIZLI = ["_1044", "_1228"];
 const _a3Sirala = (a, b) => Number(a.slice(1)) - Number(b.slice(1));
 const a3Ad = (k) => A3_AD[k] || "Əlavə 3 kod " + k;
 function yigcamSehife(data) {
   const A3_CEM = "_1091";
   const a3Hamisi = (d) => (((d.base.taxInformation || {}).appendix3 || {}).vatOperations || []);
   const a3Kodlar = [...new Set(data.flatMap((d) => a3Hamisi(d).filter((r) => r.indicator !== A3_CEM && (Number(r.cost) || Number(r.amount))).map((r) => r.indicator)))].sort(_a3Sirala);
-  const a3Goster = a3Kodlar.filter((k) => A3_AD[k]); // adı məlum olanlar sütun kimi göstərilir; hamısı CƏMİ-yə daxildir
+  const a3Goster = a3Kodlar.filter((k) => !A3_GIZLI.includes(k)); // istifadəçinin sildiyi sütunlar göstərilmir; hamısı CƏMİ-yə daxildir
   const bas = (a) => a.map((v) => ({ v, s: S.BASLIQ }));
   const sut = [..._META_BAS,
     "YGB (310): ƏDV",
