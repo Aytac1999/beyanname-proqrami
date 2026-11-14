@@ -17,9 +17,7 @@ const yaz = (p, il, ay) => { $(p + "_il").value = il; $(p + "_ay").value = ay; }
 const aralik = (i1, a1, i2, a2) => { yaz("dan", i1, a1); yaz("ya", i2, a2); };
 aralik(BU_IL, 1, BU_IL, bu.getMonth() + 1);
 $("ver").textContent = "v" + (window.APP_VERSIYA || "?");
-$("buil").onclick = () => aralik(BU_IL, 1, BU_IL, bu.getMonth() + 1);
 $("kecenil").onclick = () => aralik(BU_IL - 1, 1, BU_IL - 1, 12);
-$("son3").onclick = () => aralik(BU_IL - 2, 1, BU_IL, bu.getMonth() + 1);
 $("hamisil").onclick = () => aralik(ILK_IL, 1, BU_IL, bu.getMonth() + 1);
 $("ac").onclick = () => KOPRU("ac_etaxes");
 $("dayan").onclick = () => { dayandi = true; $("durum").textContent = "Dayandırılır..."; };
