@@ -168,7 +168,7 @@ const A3_AD = {
   _1037: "301.1.1.7 Digər malların təqdim edilməsi üzrə əməliyyatlar",
 };
 const _a3Sirala = (a, b) => Number(a.slice(1)) - Number(b.slice(1));
-const a3Ad = (k) => A3_AD[k] || "kod " + k;
+const a3Ad = (k) => A3_AD[k] || "Əlavə 3 kod " + k;
 function yigcamSehife(data) {
   const A3_CEM = "_1091";
   const a3Hamisi = (d) => (((d.base.taxInformation || {}).appendix3 || {}).vatOperations || []);
@@ -177,7 +177,7 @@ function yigcamSehife(data) {
   const sut = [..._META_BAS,
     "YGB (310): ƏDV",
     "Qaimə (308): ƏDV",
-    ...a3Kodlar.flatMap((k) => [`Əlavə 3 [${a3Ad(k)}]: Təqdim edilmiş mal, iş və xidmətlərin dəyəri (ƏDV nəzərə alınmadan)`, `Əlavə 3 [${a3Ad(k)}]: Daxil olmuş məbləğ (ƏDV nəzərə alınmadan)`]),
+    ...a3Kodlar.flatMap((k) => [`${a3Ad(k)} - Təqdim edilmiş mal, iş və xidmətlərin dəyəri (ƏDV nəzərə alınmadan)`, `${a3Ad(k)} - Daxil olmuş məbləğ (ƏDV nəzərə alınmadan)`]),
     "Əlavə 3 CƏMİ (301.1): dəyər", "Əlavə 3 CƏMİ (301.1): daxil olmuş məbləğ",
     "Hesabat dövriyyəsi (301): dəyər", "Hesabat dövriyyəsi (301): daxil olmuş məbləğ", "Hesabat dövriyyəsi (301): ƏDV",
     "Əməliyyatlar CƏMİ (305): ƏDV",
