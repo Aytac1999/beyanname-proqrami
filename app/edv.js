@@ -105,7 +105,6 @@ function yastila(obj, yol, out) {
 }
 
 function bayannameSehifeleri(data) {
-  const a3Goster = a3Kodlar.filter((k) => A3_AD[k]); // adı məlum olanlar sütun kimi göstərilir; hamısı CƏMİ-yə daxildir
   const bas = (a) => a.map((v) => ({ v, s: S.BASLIQ }));
   const sheet = (ad, sutun, setirler, eni) => ({ ad, rows: [bas([..._META_BAS, ...sutun]), ...setirler],
     eni: [10, 18, 20, 18, 14, 12, ...eni], dondur: true, suzgec: _META_BAS.length + sutun.length });
@@ -174,6 +173,7 @@ function yigcamSehife(data) {
   const A3_CEM = "_1091";
   const a3Hamisi = (d) => (((d.base.taxInformation || {}).appendix3 || {}).vatOperations || []);
   const a3Kodlar = [...new Set(data.flatMap((d) => a3Hamisi(d).filter((r) => r.indicator !== A3_CEM && (Number(r.cost) || Number(r.amount))).map((r) => r.indicator)))].sort(_a3Sirala);
+  const a3Goster = a3Kodlar.filter((k) => A3_AD[k]); // adı məlum olanlar sütun kimi göstərilir; hamısı CƏMİ-yə daxildir
   const bas = (a) => a.map((v) => ({ v, s: S.BASLIQ }));
   const sut = [..._META_BAS,
     "YGB (310): ƏDV",
