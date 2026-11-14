@@ -148,7 +148,7 @@ function bayannameSehifeleri(data) {
 // ------------------------------------------------------------------ YIĞCAM CƏDVƏL: hər bəyannamə = bir sətir
 const _r2 = (x) => (x == null || x === "" ? null : Math.round(Number(x) * 100) / 100);
 // 319.1 sətrinin e-taxes daxili kodu hələ təsdiqlənməyib: nümunə gələndə bura yazılır (boş qalarsa sütunlar boş olur)
-const KOD_319_1 = [];
+const KOD_319_1 = ["_1035"]; // 319.1: dəqiqləşdirilən dövriyyə (specifiedTurnover). _1018 = 319 CƏMİ. Avqust 2026 dəqiqləşdirilmişdə ekranla (3 061,94) uyğun; 319 ilə 319.1 fərqli olan bəyannamədə yoxlanmalıdır
 function _tap(d, bolme, kod) {
   const ti = d.base.taxInformation || {};
   return (ti[bolme] || []).find((r) => r.indicator === kod) || null;
@@ -210,7 +210,7 @@ function yigcamSehife(data) {
       _p(_r2(a3.cost)), _p(_r2(a3.amount)),
       _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)), _p(_r2(h5.vat)),
       _p(_r2(db.previousDebt)), _p(_r2(db.incurredDebt)), _p(_r2(db.removedDebt)), _p(_r2(db.lastDebt)),
-      _p(_r2(k.cost || k.turnover)), _p(_r2(k.paidAmount)), _p(_r2(k.vat)),
+      _p(_r2(k.cost || k.turnover)), _p(_r2(k.paidAmount)), _p(_r2(k.vat != null ? k.vat : k.paidVat)),
       _p(_r2(an.mustBePaid)), _p(_r2(an.mustBeReturned))];
   });
   return { ad: "ƏDV yığcam", rows: [bas(sut), ...rows], eni: [10, 18, 20, 18, 14, 12, ...sut.slice(6).map(() => 17)], dondur: true, suzgec: sut.length };
