@@ -53,10 +53,12 @@ async function bayannameSiyahisi(getJson, dan, ya, rejim, log) {
   }
   let netice = [...gor.values()];
   if (rejim === "sonuncu") {
+    // Kameral nəzərə alınmır: hər ay üçün Cari/Dəqiqləşdirilmişlərdən qeydiyyat tarixinə görə ən sonuncu (yalnız kameral varsa, o qalır)
     const ay = new Map();
     for (const b of netice) {
       const k = _ay(b.il, b.ay), c = ay.get(k);
-      const yaxsi = !c || (b.son !== c.son ? b.son : (b.reg + b.gonder + b.no) > (c.reg + c.gonder + c.no));
+      const bk = b.nov === "CAMERAL", ck = c && c.nov === "CAMERAL";
+      const yaxsi = !c || (bk !== ck ? !bk : (b.reg + b.gonder + b.no) > (c.reg + c.gonder + c.no));
       if (yaxsi) ay.set(k, b);
     }
     netice = [...ay.values()];
