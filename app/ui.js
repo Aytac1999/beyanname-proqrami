@@ -26,6 +26,7 @@ for (const t of document.querySelectorAll(".tab")) t.onclick = () => {
   $("edvBolme").hidden = !var_; $("tezlik").hidden = var_;
   $("ekBolme").hidden = tip !== "edv";
   $("dovrQeyd").textContent = tip === "omv" ? "Rüblük bəyannamədir: seçilən dövrdə başlayan rüblər götürülür (1-ci rüb = Yanvar, 2-ci = Aprel, 3-cü = İyul, 4-cü = Oktyabr)." : "";
+  $("rejim").options[1].textContent = tip === "omv" ? "Hər rüb üçün yalnız sonuncusu (Kameral nəzərə alınmır)" : "Hər ay üçün yalnız sonuncusu (Kameral nəzərə alınmır)";
   $("basla").disabled = !var_ && !isleyir;
 };
 $("ac").onclick = () => KOPRU("ac_etaxes");
