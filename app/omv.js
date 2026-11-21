@@ -52,7 +52,8 @@ const _omvSira = (a, b) => Object.keys(OMV_AD).indexOf(a) - Object.keys(OMV_AD).
 
 // rüb: e-taxes dövrün ilk ayını yazır (01, 04, 07, 10)
 const _omvIlkAy = (m) => { m = Number(m); return m === 2 || m === 3 ? (m - 1) * 3 + 1 : m; };
-async function omvSiyahisi(getJson, dan, ya, rejim, log) {
+async function omvSiyahisi(getJson, dan, ya, rejim, log, vergiKodu) {
+  vergiKodu = vergiKodu || "_1600";
   const [dI, dA] = dan.split("-").map(Number), [yI, yA] = ya.split("-").map(Number);
   const d1 = dI * 12 + dA, d2 = yI * 12 + yA, gor = new Map();
   for (let il = dI; il <= yI + 1; il++) {
@@ -61,7 +62,7 @@ async function omvSiyahisi(getJson, dan, ya, rejim, log) {
     catch (e) { if (e && e.sessiya) throw e; log && log(`! ${il}: bəyannamə siyahısı alınmadı (${e.message})`); continue; }
     for (const x of j.declarations || []) {
       const d = x.declaration;
-      if (!d || d.taxCode !== "_1600" || /DRAFT|DELET/i.test(d.declarationStatus || "")) continue;
+      if (!d || d.taxCode !== vergiKodu || /DRAFT|DELET/i.test(d.declarationStatus || "")) continue;
       const rp = d.reportingPeriod || {};
       const ay = _omvIlkAy(rp.month), k = rp.year * 12 + ay;
       if (rp.type !== "QUARTER" || k < d1 || k > d2) continue;
