@@ -1,7 +1,7 @@
 // Pəncərənin məntiqi (sandbox daxilində işləyir). e-taxes sorğuları və yükləmə KOPRU ilə panel.js-dən keçir.
 const ETAX = "https://new.e-taxes.gov.az";
 const $ = (id) => document.getElementById(id);
-let dayandi = false, isleyir = false, bearer = false;
+let dayandi = false, isleyir = false, bearer = false, tip = "edv";
 
 const bu = new Date();
 const AYLAR = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "İyun", "İyul", "Avqust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr"];
@@ -21,9 +21,12 @@ $("kecenil").onclick = () => aralik(BU_IL - 1, 1, BU_IL - 1, 12);
 $("hamisil").onclick = () => aralik(ILK_IL, 1, BU_IL, bu.getMonth() + 1);
 for (const t of document.querySelectorAll(".tab")) t.onclick = () => {
   for (const x of document.querySelectorAll(".tab")) x.classList.toggle("aktiv", x === t);
-  const edv = t.dataset.tip === "edv";
-  $("edvBolme").hidden = !edv; $("tezlik").hidden = edv;
-  $("basla").disabled = !edv && !isleyir;
+  tip = t.dataset.tip;
+  const var_ = tip === "edv" || tip === "omv";
+  $("edvBolme").hidden = !var_; $("tezlik").hidden = var_;
+  $("ekBolme").hidden = tip !== "edv";
+  $("dovrQeyd").textContent = tip === "omv" ? "Rüblük bəyannamədir: seçilən dövrdə başlayan rüblər götürülür (1-ci rüb = Yanvar, 2-ci = Aprel, 3-cü = İyul, 4-cü = Oktyabr)." : "";
+  $("basla").disabled = !var_ && !isleyir;
 };
 $("ac").onclick = () => KOPRU("ac_etaxes");
 $("dayan").onclick = () => { dayandi = true; $("durum").textContent = "Dayandırılır..."; };
@@ -64,9 +67,10 @@ $("basla").onclick = async () => {
   $("durum").textContent = "İşləyir...";
   try {
     const secim = { ygb: $("s_ygb").checked, qaime: $("s_qaime").checked, xam: $("s_xam").checked };
-    const siyahi = await bayannameSiyahisi(getJson, dan, ya, $("rejim").value, log);
-    log(`Tapıldı: ${siyahi.length} ƏDV bəyannaməsi.`);
-    if (!siyahi.length) { bitir("Seçilmiş dövrdə ƏDV bəyannaməsi tapılmadı."); return; }
+    const omv = tip === "omv", nov = omv ? "Ödəmə mənbəyində vergi" : "ƏDV";
+    const siyahi = await (omv ? omvSiyahisi : bayannameSiyahisi)(getJson, dan, ya, $("rejim").value, log);
+    log(`Tapıldı: ${siyahi.length} ${nov} bəyannaməsi.`);
+    if (!siyahi.length) { bitir(`Seçilmiş dövrdə ${nov} bəyannaməsi tapılmadı.`); return; }
     $("pb").max = siyahi.length;
     const data = new Array(siyahi.length), ugursuz = [];
     let novbe = 0, oxunan = 0;
@@ -76,7 +80,7 @@ $("basla").onclick = async () => {
         const b = siyahi[i];
         try {
           data[i] = await bayannameYukle(getJson, b, secim);
-          log(`  ${AYLAR_AZ[b.ay - 1]} ${b.il} (${BEY_NOV_AZ[b.nov] || b.nov}) oxundu`);
+          log(`  ${omv ? _omvDovr(b) : AYLAR_AZ[b.ay - 1] + " " + b.il} (${BEY_NOV_AZ[b.nov] || b.nov}) oxundu`);
         } catch (e) {
           if (e.sessiya) throw e;
           ugursuz.push(b); log(`! ${b.no}: götürülmədi (${e.message})`);
@@ -86,8 +90,8 @@ $("basla").onclick = async () => {
     }));
     const hazir = data.filter(Boolean);
     if (!hazir.length) { bitir(dayandi ? "Dayandırıldı." : "Heç bir bəyannamə oxunmadı."); return; }
-    const bayt = await xlsxYarat(secilenSehifeler(hazir, secim));
-    const ad = `edv_beyannameleri_${dan.replace("-", "")}_${ya.replace("-", "")}.xlsx`;
+    const bayt = await xlsxYarat(omv ? [omvSehife(hazir)] : secilenSehifeler(hazir, secim));
+    const ad = `${omv ? "omv" : "edv"}_beyannameleri_${dan.replace("-", "")}_${ya.replace("-", "")}.xlsx`;
     await KOPRU("yukle", { bytes: bayt, mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ad });
     log(`Hazırdır (${hazir.length} bəyannamə): ${ad} (Yükləmələr qovluğuna düşür)`);
     if (ugursuz.length) log(`Götürülməyən: ${ugursuz.map((x) => x.no).join(" ")}`);
