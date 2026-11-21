@@ -190,12 +190,21 @@ function yigcamSehife(data) {
   const a3Hamisi = (d) => (((d.base.taxInformation || {}).appendix3 || {}).vatOperations || []);
   const a3Kodlar = [...new Set(data.flatMap((d) => a3Hamisi(d).filter((r) => r.indicator !== A3_CEM && (Number(r.cost) || Number(r.amount))).map((r) => r.indicator)))].sort(_a3Sirala);
   const a3Goster = [...new Set([...a3Kodlar, ...A3_HER])].filter((k) => !A3_GIZLI.includes(k)).sort(_a3Sirala); // istifadəçinin sildiyi sütunlar göstərilmir; hamısı CƏMİ-yə daxildir
+  const a4Hamisi = (d) => (((d.base.taxInformation || {}).appendix4 || {}).zeroVat || []);
+  const a5Hamisi = (d) => (((d.base.taxInformation || {}).appendix5 || {}).freeVat || []);
+  const A4_TEK = ["_1122"]; // 302.6.1: yalnız daxil olmuş məbləğ
+  const _kodlar = (hamisi, AD, cem) => Object.keys(AD).filter((k) => k === cem || data.some((d) => hamisi(d).some((r) => r.indicator === k && (Number(r.cost) || Number(r.amount)))));
+  const a4Goster = _kodlar(a4Hamisi, A4_AD, "_1069"), a5Goster = _kodlar(a5Hamisi, A5_AD, "_1078");
+  const _bas45 = (AD, k, tek) => tek ? [`${AD[k][0]} ${AD[k][1]} - Daxil olmuş məbləğ (ƏDV nəzərə alınmadan)`] : [`${AD[k][0]} ${AD[k][1]} - Təqdim edilmiş mal, iş və xidmətlərin dəyəri (ƏDV nəzərə alınmadan)`, `${AD[k][0]} ${AD[k][1]} - Daxil olmuş məbləğ (ƏDV nəzərə alınmadan)`];
+  const _deyer45 = (hamisi, d, k, tek) => { const r = hamisi(d).find((x) => x.indicator === k) || {}; return tek ? [_p(_r2(r.amount))] : [_p(_r2(r.cost)), _p(_r2(r.amount))]; };
   const bas = (a) => a.map((v) => ({ v, s: S.BASLIQ }));
   const sut = [..._META_BAS,
     "YGB (310): ƏDV",
     "Qaimə (308): ƏDV",
     ...a3Goster.flatMap((k) => A3_TEK[k] ? [A3_TEK[k]] : [`${a3Ad(k)} - Təqdim edilmiş mal, iş və xidmətlərin dəyəri (ƏDV nəzərə alınmadan)`, `${a3Ad(k)} - Daxil olmuş məbləğ (ƏDV nəzərə alınmadan)`]),
     "Əlavə 3 CƏMİ (301.1): dəyər", "Əlavə 3 CƏMİ (301.1): daxil olmuş məbləğ",
+    ...a4Goster.flatMap((k) => _bas45(A4_AD, k, A4_TEK.includes(k))),
+    ...a5Goster.flatMap((k) => _bas45(A5_AD, k, false)),
     "Hesabat dövriyyəsi (301): dəyər", "Hesabat dövriyyəsi (301): daxil olmuş məbləğ", "Hesabat dövriyyəsi (301): ƏDV",
     "Əməliyyatlar CƏMİ (305): ƏDV",
     "Debitor borc (307): dövrün əvvəlinə", "Debitor borc (307): yaranan", "Debitor borc (307): silinən", "Debitor borc (307): dövrün sonuna",
@@ -210,6 +219,8 @@ function yigcamSehife(data) {
       _p(_r2(y.vat)), _p(_r2(q.vat)),
       ...a3Goster.flatMap((kod) => { const r = a3Hamisi(d).find((x) => x.indicator === kod) || {}; return A3_TEK[kod] ? [_p(_r2(r.amount))] : [_p(_r2(r.cost)), _p(_r2(r.amount))]; }),
       _p(_r2(a3.cost)), _p(_r2(a3.amount)),
+      ...a4Goster.flatMap((k) => _deyer45(a4Hamisi, d, k, A4_TEK.includes(k))),
+      ...a5Goster.flatMap((k) => _deyer45(a5Hamisi, d, k, false)),
       _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)), _p(_r2(h5.vat)),
       _p(_r2(db.previousDebt)), _p(_r2(db.incurredDebt)), _p(_r2(db.removedDebt)), _p(_r2(db.lastDebt)),
       _p(_r2(k.cost || k.turnover)), _p(_r2(k.paidAmount)), _p(_r2(k.vat != null ? k.vat : k.paidVat)),
