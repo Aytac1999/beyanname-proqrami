@@ -27,8 +27,18 @@ function a2Sehifeler(data) {
   const r2 = var_.map((d) => { const g = ag(d) || {}, u = un(d);
     return [..._m(d), _p(_r2(g.startRemains)), _p(_r2(g.purchased)), _p(_r2(g.sold)), _p(_r2(g.resultRemains)), _p(_r2(g.tradeSupplementCost)), _p(_r2(g.tradeSupplementVat)),
       _p(_r2(u.prePeriodAmount)), _p(_r2(u.prePeriodVat)), _p(_r2(u.periodAmount)), _p(_r2(u.periodAmountVat)), _p(_r2(u.periodEndAmount)), _p(_r2(u.periodEndVat))]; });
+  // 3-cü vərəq: hesabat dövrü üzrə dövriyyə (301, 301.2, 301-2, 305) - səhifədəki rəqəmlərlə yoxlanılıb
+  const c = (d, k) => ((((d.base || {}).taxInformation || {}).calculations) || []).find((x) => x.indicator === k) || {};
+  const s3 = [..._META_BAS,
+    "301 ƏDV-yə 18% dərəcə ilə cəlb olunan əməliyyatlar: təqdim edilmiş dəyər", "301: daxil olmuş məbləğ", "301: ƏDV məbləği",
+    "301.2 Kənd təsərrüfatı məhsullarının satışı üzrə ƏDV-yə cəlb olunan ticarət əlavəsi: daxil olmuş məbləğ", "301.2: ƏDV məbləği",
+    "301-2 Digər şəxslərdən alınan və ya idxal olunan kənd təsərrüfatı məhsullarının satışı üzrə əməliyyatlar: təqdim edilmiş dəyər",
+    "305 Əməliyyatlar üzrə CƏMİ: təqdim edilmiş dəyər", "305: daxil olmuş məbləğ", "305: ƏDV məbləği"];
+  const r3 = data.map((d) => { const a = c(d, "_1001"), b = c(d, "_1103"), e = c(d, "_1303"), f = c(d, "_1005");
+    return [..._m(d), _p(_r2(a.cost)), _p(_r2(a.amount)), _p(_r2(a.vat)), _p(_r2(b.amount)), _p(_r2(b.vat)), _p(_r2(e.cost)), _p(_r2(f.cost)), _p(_r2(f.amount)), _p(_r2(f.vat))]; });
   return [
     { ad: "Əlavə 2 - Hissə 1 (alışlar)", rows: [bas(s1), ...r1], eni: [10, 18, 20, 18, 14, 12, 8, 18, 44, 16, 14, 22, 40], dondur: true, suzgec: s1.length },
     { ad: "Əlavə 2 - Hissə 2 və Bölmə 3", rows: [bas(s2), ...r2], eni: [10, 18, 20, 18, 14, 12, ...s2.slice(6).map(() => 20)], dondur: true, suzgec: s2.length },
+    { ad: "Hesabat dövrü dövriyyəsi", rows: [bas(s3), ...r3], eni: [10, 18, 20, 18, 14, 12, ...s3.slice(6).map(() => 22)], dondur: true, suzgec: s3.length },
   ];
 }
