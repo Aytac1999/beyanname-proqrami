@@ -206,6 +206,9 @@ function yigcamSehife(data) {
     ...a4Goster.flatMap((k) => _bas45(A4_AD, k, A4_TEK.includes(k))),
     ...a5Goster.flatMap((k) => _bas45(A5_AD, k, false)),
     "Hesabat dövriyyəsi (301): dəyər", "Hesabat dövriyyəsi (301): daxil olmuş məbləğ", "Hesabat dövriyyəsi (301): ƏDV",
+    "301.2 Kənd təsərrüfatı ticarət əlavəsi: daxil olmuş məbləğ", "301.2 Kənd təsərrüfatı ticarət əlavəsi: ƏDV",
+    "301-2 Alınmış kənd təsərrüfatı məhsullarının satışı: dəyər",
+    "Əlavə 2 (Hissə 2): dövrün əvvəlinə satılmamış mal", "Əlavə 2 (Hissə 2): dövr ərzində alınmış mal", "Əlavə 2 (Hissə 2): satılmış mal (satış qiyməti ilə)", "Əlavə 2 (Hissə 2): dövrün sonuna qalıq", "Əlavə 2 (Hissə 2): ticarət əlavəsi", "Əlavə 2 (Hissə 2): ticarət əlavəsinin ƏDV-si",
     "Əməliyyatlar CƏMİ (305): ƏDV",
     "Debitor borc (307): dövrün əvvəlinə", "Debitor borc (307): yaranan", "Debitor borc (307): silinən", "Debitor borc (307): dövrün sonuna",
     "319.1: dövriyyə", "319.1: ödənilmiş məbləğ", "319.1: ƏDV",
@@ -213,7 +216,7 @@ function yigcamSehife(data) {
   const rows = data.map((d) => {
     const y = _tap(d, "refundCalculations", "_1010") || {}, q = _tap(d, "refundCalculations", "_1008") || {},
       c = _tap(d, "refundCalculations", "_1016") || {}, a3 = (((d.base.taxInformation || {}).appendix3 || {}).vatOperations || []).find((r) => r.indicator === "_1091") || {},
-      h = _tap(d, "calculations", "_1001") || {}, h5 = _tap(d, "calculations", "_1005") || {}, db = _tap(d, "debtorDebt", "_1400") || {},
+      h = _tap(d, "calculations", "_1001") || {}, h5 = _tap(d, "calculations", "_1005") || {}, h12 = _tap(d, "calculations", "_1103") || {}, h12b = _tap(d, "calculations", "_1303") || {}, ag = (((d.base.taxInformation || {}).appendix2 || {}).agroProductsRetailTotal) || {}, db = _tap(d, "debtorDebt", "_1400") || {},
       k = KOD_319_1.length ? _tapHer(d, KOD_319_1) || {} : {}, an = (d.base.taxInformation || {}).mainTax || {};
     return [..._m(d),
       _p(_r2(y.vat)), _p(_r2(q.vat)),
@@ -221,7 +224,9 @@ function yigcamSehife(data) {
       _p(_r2(a3.cost)), _p(_r2(a3.amount)),
       ...a4Goster.flatMap((k) => _deyer45(a4Hamisi, d, k, A4_TEK.includes(k))),
       ...a5Goster.flatMap((k) => _deyer45(a5Hamisi, d, k, false)),
-      _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)), _p(_r2(h5.vat)),
+      _p(_r2(h.cost)), _p(_r2(h.amount)), _p(_r2(h.vat)),
+      _p(_r2(h12.amount)), _p(_r2(h12.vat)), _p(_r2(h12b.cost)),
+      _p(_r2(ag.startRemains)), _p(_r2(ag.purchased)), _p(_r2(ag.sold)), _p(_r2(ag.resultRemains)), _p(_r2(ag.tradeSupplementCost)), _p(_r2(ag.tradeSupplementVat)), _p(_r2(h5.vat)),
       _p(_r2(db.previousDebt)), _p(_r2(db.incurredDebt)), _p(_r2(db.removedDebt)), _p(_r2(db.lastDebt)),
       _p(_r2(k.cost || k.turnover)), _p(_r2(k.paidAmount)), _p(_r2(k.vat != null ? k.vat : k.paidVat)),
       _p(_r2(an.mustBePaid)), _p(_r2(an.mustBeReturned))];
