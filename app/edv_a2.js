@@ -1,0 +1,30 @@
+// Əlavə 2 (kənd təsərrüfatı məhsulları): ayrıca Excel. Hissə 1 - alış siyahısı, Hissə 2 - ticarət əlavəsi, Bölmə 3 - 2022-dək mallar
+const A2_KOD = "VAT_APPENDIX_2_AGRO_PRODUCTS_RETAIL";
+const A2_SENED = { ELECTRONIC_INVOICE: "EQF (e-qaimə)", PURCHASE_ACT: "Alış aktı" };
+function a2Sehifeler(data) {
+  const bas = (a) => a.map((v) => ({ v, s: S.BASLIQ }));
+  const ag = (d) => ((((d.base || {}).taxInformation || {}).appendix2 || {}).agroProductsRetailTotal) || null;
+  const un = (d) => ((((((d.base || {}).taxInformation || {}).appendix2 || {}).unsoldAgroProducts) || [])[0]) || {};
+  const var_ = data.filter((d) => ag(d) || (d.a2 || []).length || Object.values(un(d)).some((x) => Number(x)));
+  // Hissə 1: hər alış ayrıca sətir
+  const s1 = [..._META_BAS, "Sıra №", "Mal alışını təsdiq edən sənəd", "Mal təqdim edənin adı", "VÖEN / FİN", "Doğum tarixi", "Hesabat dövrü ərzində alınmış malların məbləği (alış qiyməti ilə)"];
+  const r1 = [];
+  for (const d of var_) {
+    const a = [...(d.a2 || [])].sort((x, y) => (x.rowOrder || 0) - (y.rowOrder || 0));
+    for (const x of a) r1.push([..._m(d), _t(x.rowOrder), _t(A2_SENED[x.documentType] || x.documentType || ""), _t(x.taxPayerName || ""), _t(x.tin || x.pin || ""), _t(x.birthDate || ""), _p(_r2(x.purchased))]);
+    if (a.length) r1.push([..._m(d), _t(""), _t("CƏMİ"), _t(""), _t(""), _t(""), _p(_r2(a.reduce((s, x) => s + (Number(x.purchased) || 0), 0)))]);
+  }
+  // Hissə 2 və Bölmə 3: bəyannamə başına bir sətir
+  const s2 = [..._META_BAS,
+    "Hissə 2: dövrün əvvəlinə satılmamış mal (alış qiyməti ilə)", "Hissə 2: dövr ərzində alınmış mal (alış qiyməti ilə)", "Hissə 2: dövr ərzində satılmış mal (satış qiyməti ilə)",
+    "Hissə 2: dövrün sonuna mal qalığı (alış qiyməti ilə)", "Hissə 2: cari dövrdə satılmış mallara görə ticarət əlavəsi", "Hissə 2: ticarət əlavəsinin ƏDV məbləği",
+    "Bölmə 3: dövrün əvvəlinə satılmamış mal (ƏDV-siz)", "Bölmə 3: dövrün əvvəlinə satılmamış malın ƏDV-si", "Bölmə 3: dövrdə təqdim edilmiş mal (ƏDV-siz)",
+    "Bölmə 3: dövrdə təqdim edilmiş malın ƏDV-si", "Bölmə 3: dövrün sonuna satılmamış mal (ƏDV-siz)", "Bölmə 3: dövrün sonuna satılmamış malın ƏDV-si"];
+  const r2 = var_.map((d) => { const g = ag(d) || {}, u = un(d);
+    return [..._m(d), _p(_r2(g.startRemains)), _p(_r2(g.purchased)), _p(_r2(g.sold)), _p(_r2(g.resultRemains)), _p(_r2(g.tradeSupplementCost)), _p(_r2(g.tradeSupplementVat)),
+      _p(_r2(u.prePeriodAmount)), _p(_r2(u.prePeriodVat)), _p(_r2(u.periodAmount)), _p(_r2(u.periodAmountVat)), _p(_r2(u.periodEndAmount)), _p(_r2(u.periodEndVat))]; });
+  return [
+    { ad: "Əlavə 2 - Hissə 1 (alışlar)", rows: [bas(s1), ...r1], eni: [10, 18, 20, 18, 14, 12, 8, 18, 44, 16, 14, 22], dondur: true, suzgec: s1.length },
+    { ad: "Əlavə 2 - Hissə 2 və Bölmə 3", rows: [bas(s2), ...r2], eni: [10, 18, 20, 18, 14, 12, ...s2.slice(6).map(() => 20)], dondur: true, suzgec: s2.length },
+  ];
+}

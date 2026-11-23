@@ -82,11 +82,12 @@ async function bayannameYukle(getJson, b, secim) {
   secim = secim || {};
   const r = await getJson(`${BEY_API}/base?reg_number=${b.no}`);
   const base = typeof r.baseJson === "string" ? JSON.parse(r.baseJson) : (r.baseJson || {});
-  const [ygb, qaime] = await Promise.all([
+  const [ygb, qaime, a2] = await Promise.all([
     secim.ygb ? cedvel(getJson, "VAT_APPENDIX_1_REPORT_PERIOD_CCD", b.no) : [],
     secim.qaime ? cedvel(getJson, "VAT_APPENDIX_1_REPORT_PERIOD_INVOICE", b.no) : [],
+    secim.a2 ? cedvel(getJson, "VAT_APPENDIX_2_AGRO_PRODUCTS_RETAIL", b.no).catch(() => []) : [],
   ]);
-  return { ...b, base, ygb, qaime };
+  return { ...b, base, ygb, qaime, a2 };
 }
 
 // ------------------------------------------------------------------ Excel vərəqləri
