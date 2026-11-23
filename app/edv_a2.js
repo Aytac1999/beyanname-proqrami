@@ -1,7 +1,9 @@
 // Əlavə 2 (kənd təsərrüfatı məhsulları): ayrıca Excel. Hissə 1 - alış siyahısı, Hissə 2 - ticarət əlavəsi, Bölmə 3 - 2022-dək mallar
 const A2_KOD = "VAT_APPENDIX_2_AGRO_PRODUCTS_RETAIL";
-const A2_SENED = { ELECTRONIC_INVOICE: "EQF (e-qaimə)", PURCHASE_ACT: "Alış aktı" };
-const _A2_BILINEN = ["purchased", "documentType", "tin", "pin", "taxPayerName", "id", "rowOrder", "birthDate"];
+const A2_SENED = { ELECTRONIC_INVOICE: "EQF (e-qaimə)", PURCHASE_ACT: "Alış aktı", IMPORT: "İdxal" };
+const A2_OLKE = { ZAF: "Cənubi Afrika", TUR: "Türkiyə", IRN: "İran", RUS: "Rusiya", GEO: "Gürcüstan", UZB: "Özbəkistan", KAZ: "Qazaxıstan", EGY: "Misir", CHN: "Çin", IND: "Hindistan", ESP: "İspaniya", ITA: "İtaliya", GRC: "Yunanıstan", ECU: "Ekvador", CHL: "Çili", PER: "Peru", BRA: "Braziliya", ARG: "Argentina", MAR: "Mərakeş", UKR: "Ukrayna", MDA: "Moldova", POL: "Polşa", NLD: "Niderland", USA: "ABŞ", THA: "Tailand", VNM: "Vyetnam", CRI: "Kosta Rika", COL: "Kolumbiya", ISR: "İsrail" };
+const _a2Olke = (c) => (c ? (A2_OLKE[c] ? A2_OLKE[c] + " (" + c + ")" : c) : "");
+const _A2_BILINEN = ["purchased", "documentType", "tin", "pin", "taxPayerName", "id", "rowOrder", "birthDate", "country", "countryCode", "countryName"];
 const _a2Diger = (x) => Object.entries(x).filter(([k, v]) => !_A2_BILINEN.includes(k) && v != null && v !== "").map(([k, v]) => k + ": " + v).join("; ");
 function a2Sehifeler(data) {
   const bas = (a) => a.map((v) => ({ v, s: S.BASLIQ }));
@@ -13,7 +15,7 @@ function a2Sehifeler(data) {
   const r1 = [];
   for (const d of var_) {
     const a = [...(d.a2 || [])].sort((x, y) => (x.rowOrder || 0) - (y.rowOrder || 0));
-    for (const x of a) r1.push([..._m(d), _t(x.rowOrder), _t(A2_SENED[x.documentType] || x.documentType || ""), _t(x.taxPayerName || x.countryName || x.country || x.countryCode || ""), _t(x.tin || x.pin || ""), _t(x.birthDate || ""), _p(_r2(x.purchased)), _t(_a2Diger(x))]);
+    for (const x of a) r1.push([..._m(d), _t(x.rowOrder), _t(A2_SENED[x.documentType] || x.documentType || ""), _t(x.taxPayerName || x.countryName || _a2Olke(x.country || x.countryCode)), _t(x.tin || x.pin || ""), _t(x.birthDate || ""), _p(_r2(x.purchased)), _t(_a2Diger(x))]);
     if (a.length) r1.push([..._m(d), _t(""), _t("CƏMİ"), _t(""), _t(""), _t(""), _p(_r2(a.reduce((s, x) => s + (Number(x.purchased) || 0), 0))), _t("")]);
   }
   // Hissə 2 və Bölmə 3: bəyannamə başına bir sətir
