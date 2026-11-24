@@ -99,3 +99,17 @@ function omvSehife(data) {
   });
   return { ad: "ÖMV yığcam", rows: [bas(sut), ...rows], eni: [14, 18, 20, 18, 14, 12, ...sut.slice(6).map(() => 20)], dondur: true, suzgec: sut.length };
 }
+
+// ÖMV Əlavə 2, Hissə 3: güzəştli vergi tutulan ölkələrə və ya ərazilərə edilən ödənişlər (hər ödəniş ayrıca sətir)
+const OMV_ELAQE = { HAS_BANK_ACCOUNT: "Bank hesabı mövcuddur" };
+const OMV_OLKE = { "86": "Tailand" }; // yalnız yoxlanılmış kodlar; qalanı kod kimi yazılır
+function omvGuzestSehife(data) {
+  const bas = (a) => a.map((v) => ({ v, s: S.BASLIQ }));
+  const sut = [..._META_BAS, "Sətrin kodu", "Şəxsin adı", "Güzəştli vergi tutulan ölkənin və ya ərazinin adı", "Güzəştli vergi tutulan ölkə və ya ərazi ilə əlaqəsi", "Təsis edildiyi ölkədə VÖEN-i", "Təsis edildiyi ölkədə qeydiyyat ünvanı", "Gəlir məbləği, manatla", "Vergi məbləği, manatla", "Ödənişin aid olduğu dövr", "Ödəniş tarixi"];
+  const rows = [];
+  for (const d of data) {
+    const a = [...(d.omvG || [])].sort((x, y) => (x.rowOrder || 0) - (y.rowOrder || 0));
+    for (const x of a) rows.push([..._m(d), _t((OMV_AD[x.indicator] || [x.indicator])[0]), _t(x.name || ""), _t(OMV_OLKE[x.country] || x.country || ""), _t(OMV_ELAQE[x.countryRelation] || x.countryRelation || ""), _t(x.tin || ""), _t(x.address || ""), _p(_r2(x.incomeAmount)), _p(_r2(x.taxAmount)), _t(x.paymentPeriod || ""), _t(x.paymentDate || "")]);
+  }
+  return { ad: "Güzəştli ölkələrə ödənişlər", rows: [bas(sut), ...rows], eni: [10, 18, 20, 18, 14, 12, 10, 36, 22, 24, 16, 40, 16, 16, 12, 14], dondur: true, suzgec: sut.length };
+}

@@ -67,7 +67,7 @@ $("basla").onclick = async () => {
   $("log").value = ""; $("pb").value = 0; $("pb").max = 1;
   $("durum").textContent = "İşləyir...";
   try {
-    const secim = { ygb: $("s_ygb").checked, qaime: $("s_qaime").checked, xam: $("s_xam").checked, a2: tip === "a2" };
+    const secim = { ygb: $("s_ygb").checked, qaime: $("s_qaime").checked, xam: $("s_xam").checked, a2: tip === "a2", omvG: tip === "omv" };
     const omv = tip === "omv" || tip === "vahid", nov = tip === "vahid" ? "Vahid" : omv ? "Ödəmə mənbəyində vergi" : "ƏDV";
     const siyahi = await (omv ? omvSiyahisi : bayannameSiyahisi)(getJson, dan, ya, $("rejim").value, log, tip === "vahid" ? "_0901" : "_1600");
     log(`Tapıldı: ${siyahi.length} ${nov} bəyannaməsi.`);
@@ -91,7 +91,7 @@ $("basla").onclick = async () => {
     }));
     const hazir = data.filter(Boolean);
     if (!hazir.length) { bitir(dayandi ? "Dayandırıldı." : "Heç bir bəyannamə oxunmadı."); return; }
-    const bayt = await xlsxYarat(tip === "a2" ? a2Sehifeler(hazir) : tip === "vahid" ? [vahidSehife(hazir)] : omv ? [omvSehife(hazir)] : secilenSehifeler(hazir, secim));
+    const bayt = await xlsxYarat(tip === "a2" ? a2Sehifeler(hazir) : tip === "vahid" ? [vahidSehife(hazir)] : omv ? [omvSehife(hazir), ...(hazir.some((d) => (d.omvG || []).length) ? [omvGuzestSehife(hazir)] : [])] : secilenSehifeler(hazir, secim));
     const ad = `${tip === "a2" ? "edv_elave2" : tip === "vahid" ? "vahid" : omv ? "omv" : "edv"}_beyannameleri_${dan.replace("-", "")}_${ya.replace("-", "")}.xlsx`;
     await KOPRU("yukle", { bytes: bayt, mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ad });
     log(`Hazırdır (${hazir.length} bəyannamə): ${ad} (Yükləmələr qovluğuna düşür)`);
