@@ -1,5 +1,5 @@
 {
-  "versiya": "1.13.0",
+  "versiya": "1.14.0",
   "fayllar": [
     "app.css",
     "app.html",
@@ -12,6 +12,7 @@
     "meden.js",
     "menfeet_ad.js",
     "menfeet.js",
+    "torpaq.js",
     "ui.js"
   ]
 }

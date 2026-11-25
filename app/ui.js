@@ -22,10 +22,10 @@ $("hamisil").onclick = () => aralik(ILK_IL, 1, BU_IL, bu.getMonth() + 1);
 for (const t of document.querySelectorAll(".tab")) t.onclick = () => {
   for (const x of document.querySelectorAll(".tab")) x.classList.toggle("aktiv", x === t);
   tip = t.dataset.tip;
-  const var_ = tip === "edv" || tip === "a2" || tip === "meden" || tip === "menfeet" || tip === "omv" || tip === "vahid";
+  const var_ = tip === "edv" || tip === "a2" || tip === "meden" || tip === "menfeet" || tip === "torpaq" || tip === "omv" || tip === "vahid";
   $("edvBolme").hidden = !var_; $("tezlik").hidden = var_;
   $("ekBolme").hidden = tip !== "edv";
-  $("dovrQeyd").textContent = tip === "menfeet" ? "Mənfəət vergisi illik bəyannamədir: yalnız İL seçimi nəzərə alınır (ay əhəmiyyətsizdir). Vərəqlər: Gəlirlər, Xərclər, Vergi hesablanması, Əlavə 1." : tip === "meden" ? "Mədən vergisi: sətir 701–723 (yalnız dolu olan faydalı qazıntılar sütun kimi çıxır)." : tip === "a2" ? "Əlavə 2: kənd təsərrüfatı məhsullarının alışı və ticarət əlavəsi. Yalnız bu Excel yüklənir." : tip === "omv" || tip === "vahid" ? "Rüblük bəyannamədir: seçilən dövrdə başlayan rüblər götürülür (1-ci rüb = Yanvar, 2-ci = Aprel, 3-cü = İyul, 4-cü = Oktyabr)." : "";
+  $("dovrQeyd").textContent = tip === "torpaq" ? "Torpaq vergisi illik bəyannamədir: yalnız İL seçimi nəzərə alınır. Vərəqlər: hesablama, Əlavə 2 (xüsusi təyinatlı), Əlavə 1 (kənd təsərrüfatı)." : tip === "menfeet" ? "Mənfəət vergisi illik bəyannamədir: yalnız İL seçimi nəzərə alınır (ay əhəmiyyətsizdir). Vərəqlər: Gəlirlər, Xərclər, Vergi hesablanması, Əlavə 1." : tip === "meden" ? "Mədən vergisi: sətir 701–723 (yalnız dolu olan faydalı qazıntılar sütun kimi çıxır)." : tip === "a2" ? "Əlavə 2: kənd təsərrüfatı məhsullarının alışı və ticarət əlavəsi. Yalnız bu Excel yüklənir." : tip === "omv" || tip === "vahid" ? "Rüblük bəyannamədir: seçilən dövrdə başlayan rüblər götürülür (1-ci rüb = Yanvar, 2-ci = Aprel, 3-cü = İyul, 4-cü = Oktyabr)." : "";
   $("rejim").options[1].textContent = tip === "omv" || tip === "vahid" ? "Hər rüb üçün yalnız sonuncusu (Kameral nəzərə alınmır)" : "Hər ay üçün yalnız sonuncusu (Kameral nəzərə alınmır)";
   $("basla").disabled = !var_ && !isleyir;
 };
@@ -67,9 +67,9 @@ $("basla").onclick = async () => {
   $("log").value = ""; $("pb").value = 0; $("pb").max = 1;
   $("durum").textContent = "İşləyir...";
   try {
-    const secim = { ygb: $("s_ygb").checked, qaime: $("s_qaime").checked, xam: $("s_xam").checked, a2: tip === "a2", omvG: tip === "omv" };
-    const omv = tip === "omv" || tip === "vahid", nov = tip === "menfeet" ? "Mənfəət vergisi" : tip === "meden" ? "Mədən vergisi" : tip === "vahid" ? "Vahid" : omv ? "Ödəmə mənbəyində vergi" : "ƏDV";
-    const siyahi = tip === "menfeet" ? await menfeetSiyahisi(getJson, dan, ya, $("rejim").value, log) : tip === "meden" ? await bayannameSiyahisi(getJson, dan, ya, $("rejim").value, log, "_0700", /Mədən/) : await (omv ? omvSiyahisi : bayannameSiyahisi)(getJson, dan, ya, $("rejim").value, log, tip === "vahid" ? "_0901" : "_1600");
+    const secim = { ygb: $("s_ygb").checked, qaime: $("s_qaime").checked, xam: $("s_xam").checked, a2: tip === "a2", torpaq: tip === "torpaq", omvG: tip === "omv" };
+    const omv = tip === "omv" || tip === "vahid", nov = tip === "torpaq" ? "Torpaq vergisi" : tip === "menfeet" ? "Mənfəət vergisi" : tip === "meden" ? "Mədən vergisi" : tip === "vahid" ? "Vahid" : omv ? "Ödəmə mənbəyində vergi" : "ƏDV";
+    const siyahi = tip === "torpaq" ? await menfeetSiyahisi(getJson, dan, ya, $("rejim").value, log, "_0600", /Torpaq/) : tip === "menfeet" ? await menfeetSiyahisi(getJson, dan, ya, $("rejim").value, log) : tip === "meden" ? await bayannameSiyahisi(getJson, dan, ya, $("rejim").value, log, "_0700", /Mədən/) : await (omv ? omvSiyahisi : bayannameSiyahisi)(getJson, dan, ya, $("rejim").value, log, tip === "vahid" ? "_0901" : "_1600");
     log(`Tapıldı: ${siyahi.length} ${nov} bəyannaməsi.`);
     if (!siyahi.length) { bitir(`Seçilmiş dövrdə ${nov} bəyannaməsi tapılmadı.`); return; }
     $("pb").max = siyahi.length;
@@ -81,7 +81,7 @@ $("basla").onclick = async () => {
         const b = siyahi[i];
         try {
           data[i] = await bayannameYukle(getJson, b, secim);
-          log(`  ${omv ? _omvDovr(b) : (tip === "menfeet" ? "" : AYLAR_AZ[b.ay - 1] + " ") + b.il} (${BEY_NOV_AZ[b.nov] || b.nov}) oxundu`);
+          log(`  ${omv ? _omvDovr(b) : (tip === "menfeet" || tip === "torpaq" ? "" : AYLAR_AZ[b.ay - 1] + " ") + b.il} (${BEY_NOV_AZ[b.nov] || b.nov}) oxundu`);
         } catch (e) {
           if (e.sessiya) throw e;
           ugursuz.push(b); log(`! ${b.no}: götürülmədi (${e.message})`);
@@ -91,8 +91,8 @@ $("basla").onclick = async () => {
     }));
     const hazir = data.filter(Boolean);
     if (!hazir.length) { bitir(dayandi ? "Dayandırıldı." : "Heç bir bəyannamə oxunmadı."); return; }
-    const bayt = await xlsxYarat(tip === "menfeet" ? menfeetSehifeler(hazir) : tip === "meden" ? [medenSehife(hazir)] : tip === "a2" ? a2Sehifeler(hazir) : tip === "vahid" ? [vahidSehife(hazir)] : omv ? [omvSehife(hazir), ...(hazir.some((d) => (d.omvG || []).length) ? [omvGuzestSehife(hazir)] : [])] : secilenSehifeler(hazir, secim));
-    const ad = `${tip === "menfeet" ? "menfeet" : tip === "meden" ? "meden" : tip === "a2" ? "edv_elave2" : tip === "vahid" ? "vahid" : omv ? "omv" : "edv"}_beyannameleri_${tip === "menfeet" ? dan.split("-")[0] + "_" + ya.split("-")[0] : dan.replace("-", "") + "_" + ya.replace("-", "")}.xlsx`;
+    const bayt = await xlsxYarat(tip === "torpaq" ? torpaqSehifeler(hazir) : tip === "menfeet" ? menfeetSehifeler(hazir) : tip === "meden" ? [medenSehife(hazir)] : tip === "a2" ? a2Sehifeler(hazir) : tip === "vahid" ? [vahidSehife(hazir)] : omv ? [omvSehife(hazir), ...(hazir.some((d) => (d.omvG || []).length) ? [omvGuzestSehife(hazir)] : [])] : secilenSehifeler(hazir, secim));
+    const ad = `${tip === "torpaq" ? "torpaq" : tip === "menfeet" ? "menfeet" : tip === "meden" ? "meden" : tip === "a2" ? "edv_elave2" : tip === "vahid" ? "vahid" : omv ? "omv" : "edv"}_beyannameleri_${(tip === "menfeet" || tip === "torpaq") ? dan.split("-")[0] + "_" + ya.split("-")[0] : dan.replace("-", "") + "_" + ya.replace("-", "")}.xlsx`;
     await KOPRU("yukle", { bytes: bayt, mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ad });
     log(`Hazırdır (${hazir.length} bəyannamə): ${ad} (Yükləmələr qovluğuna düşür)`);
     if (ugursuz.length) log(`Götürülməyən: ${ugursuz.map((x) => x.no).join(" ")}`);

@@ -1,7 +1,8 @@
 // Mənfəət vergisi (illik, _0200): Gəlirlər, Xərclər, Vergi hesablanması, Əlavə 1 (aktivlər, kapital və öhdəliklər)
 const MV_HESAB = {_3005: ["", "Vergi dərəcəsi, %"], _3001: ["237", "Vergi tutulan mənfəət"], _3004: ["241", "Vergi tutulan mənfəət (cəmi)"], _3006: ["243", "Hesablanmış mənfəət vergisi"], _3010: ["245", "Büdcəyə ödənilməli vergi"]};
 
-async function menfeetSiyahisi(getJson, dan, ya, rejim, log) {
+async function menfeetSiyahisi(getJson, dan, ya, rejim, log, kod, ad) {
+  kod = kod || "_0200"; ad = ad || /Mənfəət/;
   const il1 = Number(dan.split("-")[0]), il2 = Number(ya.split("-")[0]), gor = new Map();
   for (let il = il1; il <= il2 + 1; il++) {  // qeydiyyat ili hesabat ilindən sonra olur
     let j;
@@ -9,7 +10,7 @@ async function menfeetSiyahisi(getJson, dan, ya, rejim, log) {
     catch (e) { if (e && e.sessiya) throw e; log && log(`! ${il}: bəyannamə siyahısı alınmadı (${e.message})`); continue; }
     for (const x of j.declarations || []) {
       const d = x.declaration;
-      if (!d || !(d.taxCode === "_0200" || /Mənfəət/.test(d.taxName || "")) || /DRAFT|DELET/i.test(d.declarationStatus || "")) continue;
+      if (!d || !(d.taxCode === kod || ad.test(d.taxName || "")) || /DRAFT|DELET/i.test(d.declarationStatus || "")) continue;
       const rp = d.reportingPeriod || {};
       if (rp.type !== "YEAR" || rp.year < il1 || rp.year > il2) continue;
       gor.set(d.registrationNumber, { il: rp.year, ay: 1, no: d.registrationNumber, nov: d.declarationType, status: d.declarationStatus,

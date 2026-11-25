@@ -89,7 +89,12 @@ async function bayannameYukle(getJson, b, secim) {
     secim.a2 ? cedvel(getJson, "VAT_APPENDIX_2_AGRO_PRODUCTS_RETAIL", b.no).catch(() => []) : [],
     secim.omvG ? cedvel(getJson, "WITHHOLDING_APPENDIX_2_PREFERENTIAL_TAX", b.no).catch(() => []) : [],
   ]);
-  return { ...b, base, ygb, qaime, a2, omvG };
+  let torpaq = null;
+  if (secim.torpaq) {
+    const [ozel, kend] = await Promise.all(["LAND_SPECIAL_PURPOSE", "LAND_AGRICULTURAL_PURPOSE"].map((k) => cedvel(getJson, k, b.no).catch(() => [])));
+    torpaq = { ozel, kend };
+  }
+  return { ...b, base, ygb, qaime, a2, omvG, torpaq };
 }
 
 // ------------------------------------------------------------------ Excel vərəqləri
