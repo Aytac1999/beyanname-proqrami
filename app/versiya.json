@@ -1,1 +1,17 @@
-{"versiya": "1.12.0", "fayllar": ["app.css", "app.html", "xlsx.js", "edv_a45.js", "edv.js", "edv_a2.js", "omv.js", "vahid.js", "meden.js", "ui.js"]}
+{
+  "versiya": "1.13.0",
+  "fayllar": [
+    "app.css",
+    "app.html",
+    "xlsx.js",
+    "edv_a45.js",
+    "edv.js",
+    "edv_a2.js",
+    "omv.js",
+    "vahid.js",
+    "meden.js",
+    "menfeet_ad.js",
+    "menfeet.js",
+    "ui.js"
+  ]
+}
