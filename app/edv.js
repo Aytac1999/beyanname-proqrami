@@ -31,7 +31,8 @@ const LUGAT = {
 const _ay = (il, ay) => il * 12 + ay;
 
 // dan/ya: "YYYY-MM". rejim: "hamisi" (bütün növlər) | "sonuncu" (hər ay üçün e-taxes-in "sonuncu" işarəli bəyannaməsi)
-async function bayannameSiyahisi(getJson, dan, ya, rejim, log) {
+async function bayannameSiyahisi(getJson, dan, ya, rejim, log, vergiKodu, vergiAdi) {
+  vergiKodu = vergiKodu || "_0300"; vergiAdi = vergiAdi || /Əlavə dəyər/;
   const [dI, dA] = dan.split("-").map(Number), [yI, yA] = ya.split("-").map(Number);
   const d1 = _ay(dI, dA), d2 = _ay(yI, yA);
   const gor = new Map();
@@ -41,7 +42,7 @@ async function bayannameSiyahisi(getJson, dan, ya, rejim, log) {
     catch (e) { if (e && e.sessiya) throw e; log && log(`! ${il}: bəyannamə siyahısı alınmadı (${e.message})`); continue; }
     for (const x of j.declarations || []) {
       const d = x.declaration;
-      if (!d || !(d.taxCode === "_0300" || /Əlavə dəyər/.test(d.taxName || ""))) continue;
+      if (!d || !(d.taxCode === vergiKodu || vergiAdi.test(d.taxName || ""))) continue;
       const rp = d.reportingPeriod || {};
       if (rp.type !== "MONTH" || /DRAFT|DELET/i.test(d.declarationStatus || "")) continue;
       const k = _ay(rp.year, rp.month);
